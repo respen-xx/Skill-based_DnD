@@ -77,7 +77,7 @@ class Controller:
         dialog.destroy()
         
         if creature != None:
-            with open("./" + creature + ".creature", "w") as f:
+            with open("../data/" + creature + ".creature", "w") as f:
                 cPickle.dump(self.__creatureList.get_by_name(creature), f)
                 print "  %s saved." % creature
     
