@@ -1,0 +1,22 @@
+CREATE TABLE skill 
+    (skill_id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+     skill_name VARCHAR(20) NOT NULL,
+     skill_type ENUM('regular', 'targetable') NOT NULL, 
+     skill_class ENUM('Skill', 'TargetableSkill') NOT NULL, 
+     skill_description TEXT,
+     CONSTRAINT PRIMARY KEY skill_pk (skill_id),
+     CONSTRAINT UNIQUE skill_unique (skill_name)
+    )
+;
+
+INSERT INTO skill VALUES
+    (NULL, 'Appraise', 'regular', 'Skill', NULL),
+    (NULL, 'Stealth', 'targetable', 'TargetableSkill', NULL)
+;
+
+SELECT skill_name, skill_type FROM skill
+ORDER BY skill_name;
+
+SELECT skill_name, skill_type FROM skill
+ORDER BY skill_type, skill_name;
+
