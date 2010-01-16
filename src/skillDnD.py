@@ -79,7 +79,7 @@ class Controller:
         if creature != None:
             with open("../data/" + creature + ".creature", "w") as f:
                 cPickle.dump(self.__creatureList.get_by_name(creature), f)
-                print "  %s saved." % creature
+                print "  %s was saved." % creature
     
     def load_creature(self, widget, data = None):
         print "  Starting to load a creature."
@@ -91,7 +91,7 @@ class Controller:
         creature = None
         if response == 1:
             creature = dialog.get_filename()
-            print "    %s selected." % creature
+            print "    %s was selected." % creature
         else:
             print "  Loading aborted."
         dialog.destroy()
