@@ -24,12 +24,12 @@ class Skill:
         get_exp()                           -> returns the experience value
         get_description()                   -> returns the description string
         get_name()                          -> returns the name string
-        get_associated_attributes()          -> returns list of attribute names
+        get_associated_attributes()         -> returns list of attribute names
         get_opposing_skill()                -> returns the opposing skill's name
-        set_description()
-        level_up(int:numOfLevels)
-        gain_exp(int:skillCheckResult)
-        use(list:attributes[, int:difficulty, Creature:target])    -> returns an int rating the success
+        set_description(string:newDesc)     -> sets description to newDesc
+        level_up(int:numOfLevels)           -> levels up this skill by numOfLevels and resets experience to zero
+        gain_exp(int:skillCheckResult)      -> 
+        use(int:attributeBonus[, int:difficulty, Creature:target, int:modifiers])    -> returns an int rating the success
     """
 
     def __init__(self, name, associatedAttributes, oppSk = None, lvl = 0, exp = 0, description = "No description given."):
@@ -69,9 +69,9 @@ class Skill:
         # determine gained experience using the skill check's result
         expGain = 0
         if skillCheckResult >= 0:
-            expGain += int(500 / (result + 20) - 5)
-        else:
-            expGain += int(500 / (result + 50) - 5)
+            expGain = 15 - skillCheckResult
+        elif skillCheckResult < 0 and skillCheckResult >= -5:
+            expGain = 6 + skillCheckResult
         
         # apply gained experience
         self.__experience += expGain
@@ -80,19 +80,16 @@ class Skill:
         if self.__experience >= 100:
             self.__level_up()
     
-    def use(attributes, difficulty = 0, target = None):
-        # initiate calculation variables
-        r = randint(0, 20)
-        attributeAverage = 0
-        for value in attributes:
-            attributeAverage += value
-        attributeAverage = attributeAverage / len(attributes)
+    def use(attributeBonus, dc = 0, target = None, modifiers = 0):
+        # perform creature's roll
+        roll = self.__level + attributeBonus + modifiers + randint(1, 20)
         
+        # determine the result
         if target is not None and self.__opposingSkill is not None:
             # determine difficulty for the target and then call for their response
-            result = target.use_skill(self.__opposingSkill, difficulty = (self.__level + attributeAverage))
+            result = target.use_skill(self.__opposingSkill, roll)
         else:
-            result = self.__level + attributeAverage - difficulty + r
+            result = roll - dc
         
         # gain experience for using the skill
         self.gain_exp(result)

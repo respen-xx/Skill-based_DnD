@@ -30,7 +30,7 @@ class Creature:
                                     the creature
         get_fatigue_percentage()  -> returns the value for the creature's fatigue
                                     percentage
-        use_skill(string:skillName[,int:difficulty,Creature:target]) -> returns a
+        use_skill(string:skillName[,int:difficulty,Creature:target, int:modifiers]) -> returns a
                                     value indicating the degree of success of
                                     the action
     """
@@ -76,14 +76,14 @@ class Creature:
     def get_fatigue_percentage(self):
         return self.__health.get_fatigue_percentage()
         
-    def use_skill(self, skillName, difficulty = 0, target = None):
+    def use_skill(self, skillName, difficulty = 0, target = None, modifiers = 0):
         # set initial variables
         skill = self.__skills.get_skill(skillName)
-        relevantAttributes = []
+        attributeBonus = 0
         for i in skill.get_associated_attributes():
-            relevantAttributes.append(self.__attributes[i])
+            attributeBonus += int((self.__attributes[i] - 10) / 2)
         
-        return skill.use(difficulty, target, relevantAttributes)
+        return skill.use(attributeBonus, difficulty, target, modifiers)
             
 #------------------------------------------------------------------------------#
 
@@ -95,21 +95,21 @@ class Health:
     A management class controlling a creature's health.
     
     Functions:
-        get_max_wp()                          -> returns the max wound point value
-        get_current_wp()                      -> returns the current wp value
-        get_wound_percentage()              -> returns percent of wounds in int
-        get_status()                         -> returns a list of status effects
-        get_max_fatigue()                     -> returns max fatigue value
-        get_current_fatigue()                 -> returns current fatigue value
-        get_fatigue_percentage()            -> returns percent of fatigue in int
-        damage_wp(int:amount)                  -> returns modified wp,
-                                                and raises death exception if
-                                                health goes to zero or past
-        heal_wp(int:amount)                    -> returns modifed wp
-        add_status_effect(string:effect)
-        remove_status_effect(string:effect)   -> returns the effect removed
-        recover_fatigue(int:amount)          -> returns modified fatigue value
-        drain_fatigue(int:amount)            -> returns modified fatigue value
+        get_max_wp()                            -> returns the max wound point value
+        get_current_wp()                        -> returns the current wp value
+        get_wound_percentage()                  -> returns percent of wounds in int
+        get_status()                            -> returns a list of status effects
+        get_max_fatigue()                       -> returns max fatigue value
+        get_current_fatigue()                   -> returns current fatigue value
+        get_fatigue_percentage()                -> returns percent of fatigue in int
+        damage_wp(int:amount)                   -> returns modified wp,
+                                                    and raises death exception if
+                                                    health goes to zero or past
+        heal_wp(int:amount)                     -> returns modifed wp
+        add_status_effect(string:effect)        -> adds effect to status listing
+        remove_status_effect(string:effect)     -> returns the effect removed
+        recover_fatigue(int:amount)             -> returns modified fatigue value
+        drain_fatigue(int:amount)               -> returns modified fatigue value
     """
     
     def __init__(self, conScore, strScore, status = ["None"], curWP = -1, curFatigue = -1):
