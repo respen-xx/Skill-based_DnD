@@ -81,7 +81,10 @@ class Creature:
         skill = self.__skills.get_skill(skillName)
         attributeBonus = 0
         for i in skill.get_associated_attributes():
-            attributeBonus += int((self.__attributes[i] - 10) / 2)
+            if self.__attributes[i] >= 10:
+                attributeBonus += int((self.__attributes[i] - 10) / 2)
+            else:
+                attributeBonus += int((self.__attributes[i] - 11) / 2)
         
         return skill.use(attributeBonus, difficulty, target, modifiers)
             
