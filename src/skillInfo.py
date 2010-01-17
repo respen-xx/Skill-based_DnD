@@ -117,7 +117,8 @@ class SkillList(list):
             # now add all known skills to self's list
             self.append(Skill("Attack", ["Strength", "Dexterity"], "Defense"))
             self.append(Skill("Defense", ["Dexterity", "Constitution"]))
-            self.append(Skill("Magic", ["Constitution", "Intelligence", "Wisdom"]))
+            self.append(Skill("Magic", ["Constitution", "Intelligence", "Wisdom"], "Magic Defense"))
+            self.append(Skill("Magic Defense", ["Dexterity", "Constitution", "Intelligence", "Wisdom"])
     
     def get_all_skill_names(self):
         allSkillNames = []
